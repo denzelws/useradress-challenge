@@ -1,11 +1,16 @@
 package com.challenge.backend.service;
 
+import com.challenge.backend.dto.AddressResponseDto;
+import com.challenge.backend.dto.UserRequestDto;
+import com.challenge.backend.dto.UserResponseDto;
+import com.challenge.backend.entity.Role;
 import com.challenge.backend.entity.User;
+import com.challenge.backend.exception.BusinessException;
 import com.challenge.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -16,20 +21,57 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+
+    public UserResponseDto createUser(UserRequestDto requestDto) {
+        if (userRepository.existsByCpf(requestDto.cpf())) {
+            throw new BusinessException("Não é permitido cadastrar mais de um usuário com o mesmo CPF.");
+        }
+
+        User user = User.builder()
+                .name(requestDto.name())
+                .cpf(requestDto.cpf())
+                .birthDate(requestDto.birthDate())
+                .password(requestDto.password())
+                .role(Role.USER)
+                .build();
+
+        User savedUser = userRepository.save(user);
+
+        return new UserResponseDto(
+                savedUser.getId(),
+                savedUser.getName(),
+                savedUser.getCpf(),
+                savedUser.getBirthDate(),
+                savedUser.getRole(),
+                List.of()
+        );
     }
 
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    @Transactional(readOnly = true)
+    public UserResponseDto getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        List<AddressResponseDto> addressDtos = user.getAddresses().stream()
+                .map(AddressResponseDto::fromEntity)
+                .toList();
+
+        return new UserResponseDto(
+                user.getId(), user.getName(), user.getCpf(),
+                user.getBirthDate(), user.getRole(), addressDtos
+        );
     }
 
-    public Optional<User> findUserById(Long id) {
-        return userRepository.findById(id);
+    @Transactional(readOnly = true)
+    public List<UserResponseDto> getAllUsers() {
+        return userRepository.findAll().stream().map(user -> {
+            List<AddressResponseDto> addressDtos = user.getAddresses().stream()
+                    .map(AddressResponseDto::fromEntity)
+                    .toList();
+            return new UserResponseDto(
+                    user.getId(), user.getName(), user.getCpf(),
+                    user.getBirthDate(), user.getRole(), addressDtos
+            );
+        }).toList();
     }
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
 }

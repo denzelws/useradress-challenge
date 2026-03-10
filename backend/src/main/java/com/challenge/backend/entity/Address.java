@@ -16,20 +16,30 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 8)
+    private String zipCode;
+
     @Column(nullable = false)
     private String street;
 
+    @Column(nullable = false)
     private String number;
 
+    private String complement;
+
+    @Column(nullable = false)
+    private String neighborhood;
+
+    @Column(nullable = false)
     private String city;
 
+    @Column(nullable = false)
     private String state;
 
-    private String zipCode;
-
-    private Boolean mainAddress = false;
+    @Column(nullable = false)
+    private Boolean isMainAddress = false;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }
