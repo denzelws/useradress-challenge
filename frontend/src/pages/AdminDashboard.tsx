@@ -21,6 +21,16 @@ import logo from "../assets/solution-logo.svg";
 import { UserDialog } from "../components/UserDialog";
 
 import { AddressDialog } from "../components/AddressDialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"users" | "addresses">("users");
@@ -28,6 +38,9 @@ export function AdminDashboard() {
   const [globalAddresses, setGlobalAddresses] = useState<Address[]>([]);
   const navigate = useNavigate();
   const [adminName, setAdminName] = useState("Admin");
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("solution_user");
@@ -67,12 +80,16 @@ export function AdminDashboard() {
     }
   };
 
-  const handleDeleteUser = async (id: number | undefined) => {
-    if (!id || !window.confirm("Excluir usuário e todos os seus endereços?"))
-      return;
+  const handleDeleteClick = (user: User) => {
+    setUserToDelete(user);
+    setDeleteDialogOpen(true);
+  };
 
-    await UserService.delete(id);
-
+  const handleConfirmDelete = async () => {
+    if (!userToDelete?.id) return;
+    await UserService.delete(userToDelete.id);
+    setDeleteDialogOpen(false);
+    setUserToDelete(null);
     loadUsers();
   };
 
@@ -167,12 +184,13 @@ export function AdminDashboard() {
                           <AddressDialog
                             userId={user.id!}
                             userName={user.name}
+                            onUpdate={loadUsers}
                           />
 
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleDeleteUser(user.id)}
+                            onClick={() => handleDeleteClick(user)}
                             className="text-[#F44336]"
                           >
                             Excluir
@@ -218,7 +236,7 @@ export function AdminDashboard() {
                           </TableCell>
 
                           <TableCell className="text-xs font-bold text-gray-500">
-                            ID Usuário: {addr.userId}
+                            ID Usuário: {addr.id}
                           </TableCell>
 
                           <TableCell className="text-center">
@@ -242,6 +260,35 @@ export function AdminDashboard() {
           </Card>
         </div>
       </main>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent className="border border-[#0A0A0A]/10 shadow-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-[#F44336] text-lg font-bold">
+              Excluir usuário
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-[#0A0A0A]/60">
+              Tem certeza que deseja excluir o usuário{" "}
+              <span className="font-semibold text-[#0A0A0A]">
+                {userToDelete?.name}
+              </span>
+              ? Todos os endereços vinculados também serão removidos. Essa ação
+              não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-[#0A0A0A]/15 text-[#0A0A0A]/70 hover:bg-[#0A0A0A]/5">
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              className="!bg-[#F44336] hover:!bg-[#D32F2F] text-white font-semibold"
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
