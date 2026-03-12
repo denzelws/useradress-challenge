@@ -18,7 +18,7 @@ Para testar as funcionalidades exclusivas de gestão (listar todos os usuários,
 A infraestrutura foi desenhada de forma híbrida: o **Backend e o Banco de Dados** rodam isolados via Docker, enquanto o **Frontend** é executado localmente.
 
 ### Passo 1: Iniciar o Backend e o Banco de Dados (Docker)
-Certifique-se de ter o [Docker](https://www.docker.com/) instalado e rodando. No terminal, navegue até a pasta raiz do projeto (onde está o arquivo `docker-compose.yml`) e execute:
+Certifique-se de ter o [Docker](https://www.docker.com/) instalado e rodando. No terminal, navegue até a pasta do projeto backend (onde está o arquivo `docker-compose.yml`) e execute:
 
 ```bash
 docker-compose up --build
