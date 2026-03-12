@@ -3,12 +3,21 @@ import { api } from "./api";
 export interface User {
   id?: number;
   name: string;
-  email: string;
   cpf: string;
   birthDate: string;
+  password: string;
+  role?: string;
 }
 
 export const UserService = {
+  login: async (credentials: {
+    cpf: string;
+    password: string;
+  }): Promise<User> => {
+    const response = await api.post<User>("/users/login", credentials);
+    return response.data;
+  },
+
   getAll: async (): Promise<User[]> => {
     const response = await api.get<User[]>("/users");
     return response.data;
@@ -20,7 +29,12 @@ export const UserService = {
   },
 
   create: async (user: User): Promise<User> => {
-    const response = await api.post<User>("/users", user);
+    const userToCreate = {
+      ...user,
+      role: user.role || "USER",
+    };
+
+    const response = await api.post<User>("/users", userToCreate);
     return response.data;
   },
 
