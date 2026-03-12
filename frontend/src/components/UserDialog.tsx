@@ -11,6 +11,8 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
+import { toast } from "sonner";
+
 import { UserService } from "../services/UserServices";
 import { formatCpf } from "@/utils/formatters";
 
@@ -50,7 +52,7 @@ export function UserDialog({ onSuccess }: UserDialogProps) {
       onSuccess();
     } catch (error) {
       console.error("Erro ao criar usuário:", error);
-      alert("Erro ao criar usuário. Verifique se o CPF já existe.");
+      toast.error("Erro ao criar usuário. Verifique se o CPF já existe.");
     } finally {
       setLoading(false);
     }

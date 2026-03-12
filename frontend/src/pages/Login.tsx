@@ -6,6 +6,8 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
+import { toast } from "sonner";
+
 import {
   Card,
   CardContent,
@@ -60,7 +62,8 @@ export function Login() {
       }
     } catch (error: any) {
       console.error("Erro no login:", error);
-      alert("CPF ou senha inválidos.");
+      toast.error("CPF ou senha inválidos.");
+      ("CPF ou senha inválidos.");
     } finally {
       setLoading(false);
     }
@@ -84,9 +87,9 @@ export function Login() {
       navigate("/meu-perfil");
     } catch (error: any) {
       if (error.response?.status === 409) {
-        alert("Este CPF já está cadastrado.");
+        toast.error("Este CPF já está cadastrado.");
       } else {
-        alert("Erro ao realizar cadastro. Tente novamente.");
+        toast.error("Erro ao realizar cadastro. Tente novamente.");
       }
     } finally {
       setLoading(false);

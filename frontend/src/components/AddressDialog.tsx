@@ -31,6 +31,8 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog";
 
+import { toast } from "sonner";
+
 interface AddressDialogProps {
   userId: number;
   userName: string;
@@ -124,7 +126,7 @@ export function AddressDialog({
     setCity(addr.city);
     setState(addr.state);
     setIsMainAddress(addr.isMainAddress);
-    setIsAdding(true); // Abre o formulário
+    setIsAdding(true);
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -144,10 +146,8 @@ export function AddressDialog({
 
     try {
       if (editingAddressId) {
-        // MODO EDIÇÃO
         await AddressService.update(userId, editingAddressId, addressData);
       } else {
-        // MODO CRIAÇÃO
         await AddressService.create(userId, addressData);
       }
 
@@ -156,7 +156,7 @@ export function AddressDialog({
       loadAddresses();
     } catch (error) {
       console.error("Erro ao salvar endereço", error);
-      alert("Erro ao salvar o endereço.");
+      toast.error("Erro ao salvar o endereço.");
     } finally {
       setLoading(false);
     }
@@ -167,7 +167,6 @@ export function AddressDialog({
     setDeleteDialogOpen(true);
   };
 
-  // Executa a exclusão após confirmação
   const handleConfirmDelete = async () => {
     if (!addressToDelete?.id) return;
     try {
