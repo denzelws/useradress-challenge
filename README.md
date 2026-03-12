@@ -6,7 +6,7 @@
 
 ## Acesso de Administrador
 
-Para testar as funcionalidades exclusivas de gestão (listar todos os usuários, visão global de endereços, exclusão em cascata), utilize as seguintes credenciais na tela de login:
+Para testar as funcionalidades exclusivas de gestão (listar todos os usuários, visão global de endereços, exclusão), utilize as seguintes credenciais na tela de login:
 
 * **CPF:** `000.000.000-00` (ou apenas os números `00000000000`)
 * **Senha:** `admin123`
@@ -24,3 +24,14 @@ Certifique-se de ter o [Docker](https://www.docker.com/) instalado e rodando. No
 docker-compose up --build
 
 Isso subirá automaticamente o banco PostgreSQL (porta 5432) e a API Spring Boot (porta 8080).
+```
+
+### Passo 2: Iniciar o Frontend (React/Vite)
+Como o backend está rodando no Docker, você precisará iniciar o frontend localmente.
+
+1. Abra uma **nova aba ou janela no seu terminal** (para manter o Docker rodando na anterior).
+2. Navegue até a pasta onde está o código do frontend.
+3. Instale as dependências do projeto utilizando o Yarn:
+   ```bash
+   yarn
+   yarn dev
