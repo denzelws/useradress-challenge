@@ -15,10 +15,10 @@ import logo from "../assets/solution-logo.svg";
 
 import { AddressDialog } from "../components/AddressDialog";
 import { formatCpfDisplay } from "@/utils/formatters";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function UserDashboard() {
-  const { user, logout } = useCurrentUser();
+  const { user, logout } = useAuth();
   const [addresses, setAddresses] = useState<Address[]>([]);
 
   useEffect(() => {

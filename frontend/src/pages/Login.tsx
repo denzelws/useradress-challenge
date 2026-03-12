@@ -17,6 +17,7 @@ import {
 
 import { UserService } from "@/services/UserServices";
 import { formatCpf } from "@/utils/formatters";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -27,6 +28,8 @@ export function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const { login } = useAuth();
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -35,16 +38,20 @@ export function Login() {
 
     try {
       if (cleanCpf === "00000000000" && password === "admin123") {
-        localStorage.setItem(
-          "solution_user",
-          JSON.stringify({ id: 0, name: "Admin", role: "ADMIN" }),
-        );
+        login({
+          id: 0,
+          name: "Admin",
+          cpf: "00000000000",
+          birthDate: "",
+          password: "",
+          role: "ADMIN",
+        });
         navigate("/admin");
         return;
       }
 
       const user = await UserService.login({ cpf: cleanCpf, password });
-      localStorage.setItem("solution_user", JSON.stringify(user));
+      login(user);
 
       if (user.role === "ADMIN") {
         navigate("/admin");
@@ -73,7 +80,7 @@ export function Login() {
         role: "USER",
       });
 
-      localStorage.setItem("solution_user", JSON.stringify(newUser));
+      login(newUser);
       navigate("/meu-perfil");
     } catch (error: any) {
       if (error.response?.status === 409) {

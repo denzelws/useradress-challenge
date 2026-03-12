@@ -29,7 +29,7 @@ import logo from "../assets/solution-logo.svg";
 
 import { UserDialog } from "../components/UserDialog";
 import { AddressDialog } from "../components/AddressDialog";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"users" | "addresses">("users");
@@ -39,7 +39,7 @@ export function AdminDashboard() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
-  const { user, logout } = useCurrentUser();
+  const { user, logout } = useAuth();
   const adminName = user?.name ?? "Admin";
 
   useEffect(() => {
