@@ -2,7 +2,7 @@
 
 * **Backend:** Java, Spring Boot, Spring Data JPA, PostgreSQL.
 * **Frontend:** React 19, TypeScript, Vite, Tailwind CSS 4, Shadcn UI.
-* **Infraestrutura:** Docker & Docker Compose.
+* **Infraestrutura:** Docker & Docker Compose (para API e Banco de Dados).
 
 ## Acesso de Administrador
 
@@ -22,3 +22,5 @@ Certifique-se de ter o [Docker](https://www.docker.com/) instalado e rodando. No
 
 ```bash
 docker-compose up --build
+
+Isso subirá automaticamente o banco PostgreSQL (porta 5432) e a API Spring Boot (porta 8080).
