@@ -28,7 +28,7 @@ public class UserController {
         return userRepository.findByCpf(loginData.getCpf())
                 .map(user -> {
                     if (user.getPassword().equals(loginData.getPassword())) {
-                        return ResponseEntity.ok(user);
+                        return ResponseEntity.ok(UserResponseDto.fromEntity(user));
                     }
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha incorreta");
                 })
@@ -49,5 +49,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

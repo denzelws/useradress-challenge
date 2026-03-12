@@ -7,8 +7,10 @@ import com.challenge.backend.entity.Role;
 import com.challenge.backend.entity.User;
 import com.challenge.backend.exception.BusinessException;
 import com.challenge.backend.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -73,5 +75,12 @@ public class UserService {
                     user.getBirthDate(), user.getRole(), addressDtos
             );
         }).toList();
+    }
+
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
+        }
+        userRepository.deleteById(id);
     }
 }
