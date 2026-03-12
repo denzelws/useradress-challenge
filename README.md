@@ -4,7 +4,7 @@
 * **Frontend:** React 19, TypeScript, Vite, Tailwind CSS 4, Shadcn UI.
 * **Infraestrutura:** Docker & Docker Compose.
 
-## 🔐 Acesso de Administrador
+## Acesso de Administrador
 
 Para testar as funcionalidades exclusivas de gestão (listar todos os usuários, visão global de endereços, exclusão em cascata), utilize as seguintes credenciais na tela de login:
 
