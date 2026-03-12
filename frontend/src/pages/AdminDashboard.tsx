@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
@@ -30,29 +29,18 @@ import logo from "../assets/solution-logo.svg";
 
 import { UserDialog } from "../components/UserDialog";
 import { AddressDialog } from "../components/AddressDialog";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"users" | "addresses">("users");
   const [users, setUsers] = useState<User[]>([]);
   const [globalAddresses, setGlobalAddresses] = useState<Address[]>([]);
-  const navigate = useNavigate();
-  const [adminName, setAdminName] = useState("Admin");
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem("solution_user");
-    if (savedUser) {
-      const parsed = JSON.parse(savedUser);
-      setAdminName(parsed.name);
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("solution_user");
-    navigate("/");
-  };
+  const { user, logout } = useCurrentUser();
+  const adminName = user?.name ?? "Admin";
 
   useEffect(() => {
     if (activeTab === "users") loadUsers();
@@ -127,7 +115,7 @@ export function AdminDashboard() {
             </div>
             <Button
               variant="ghost"
-              onClick={handleLogout}
+              onClick={logout}
               className="text-[#F44336] hover:bg-[#F44336]/10 h-8 text-xs font-semibold"
             >
               Sair

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { Button } from "../components/ui/button";
 import {
@@ -10,31 +9,21 @@ import {
   CardDescription,
 } from "../components/ui/card";
 
-import { type User } from "../services/UserServices";
 import { AddressService, type Address } from "../services/AddressService";
 
 import logo from "../assets/solution-logo.svg";
 
 import { AddressDialog } from "../components/AddressDialog";
 import { formatCpfDisplay } from "@/utils/formatters";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export function UserDashboard() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, logout } = useCurrentUser();
   const [addresses, setAddresses] = useState<Address[]>([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("solution_user");
-
-    if (!savedUser) {
-      navigate("/");
-      return;
-    }
-
-    const parsedUser = JSON.parse(savedUser);
-    setUser(parsedUser);
-    fetchAddresses(parsedUser.id);
-  }, [navigate]);
+    if (user?.id) fetchAddresses(user.id);
+  }, [user]);
 
   const fetchAddresses = async (userId: number) => {
     try {
@@ -46,11 +35,6 @@ export function UserDashboard() {
     } catch (error) {
       console.error("Erro ao buscar preview de endereços:", error);
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("solution_user");
-    navigate("/");
   };
 
   if (!user) return null;
@@ -68,7 +52,7 @@ export function UserDashboard() {
           </div>
           <Button
             variant="ghost"
-            onClick={handleLogout}
+            onClick={logout}
             className="text-[#F44336] hover:bg-[#F44336]/10 h-9"
           >
             Sair
