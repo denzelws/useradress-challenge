@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { Button } from "../components/ui/button";
 import {
   Card,
@@ -8,10 +9,14 @@ import {
   CardTitle,
   CardDescription,
 } from "../components/ui/card";
+
 import { type User } from "../services/UserServices";
 import { AddressService, type Address } from "../services/AddressService";
-import { AddressDialog } from "../components/AddressDialog";
+
 import logo from "../assets/solution-logo.svg";
+
+import { AddressDialog } from "../components/AddressDialog";
+import { formatCpfDisplay } from "@/utils/formatters";
 
 export function UserDashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -94,10 +99,7 @@ export function UserDashboard() {
                     CPF
                   </label>
                   <p className="font-medium text-[#0A0A0A]">
-                    {user.cpf.replace(
-                      /(\d{3})(\d{3})(\d{3})(\d{2})/,
-                      "$1.$2.$3-$4",
-                    )}
+                    {formatCpfDisplay(user.cpf)}
                   </p>
                 </div>
                 <div>

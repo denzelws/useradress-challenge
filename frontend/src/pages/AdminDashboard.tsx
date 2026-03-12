@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Button } from "../components/ui/button";
-import { Card, CardContent } from "../components/ui/card";
 import { useNavigate } from "react-router-dom";
 
+import { Button } from "../components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
 import {
   Table,
   TableBody,
@@ -12,15 +12,6 @@ import {
   TableRow,
 } from "../components/ui/table";
 
-import { UserService, type User } from "../services/UserServices";
-
-import { AddressService, type Address } from "../services/AddressService";
-
-import logo from "../assets/solution-logo.svg";
-
-import { UserDialog } from "../components/UserDialog";
-
-import { AddressDialog } from "../components/AddressDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,6 +22,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+
+import { UserService, type User } from "../services/UserServices";
+import { AddressService, type Address } from "../services/AddressService";
+
+import logo from "../assets/solution-logo.svg";
+
+import { UserDialog } from "../components/UserDialog";
+import { AddressDialog } from "../components/AddressDialog";
 
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"users" | "addresses">("users");

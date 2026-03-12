@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -9,7 +10,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+
 import { UserService } from "../services/UserServices";
+import { formatCpf } from "@/utils/formatters";
 
 interface UserDialogProps {
   onSuccess: () => void;
@@ -22,15 +25,6 @@ export function UserDialog({ onSuccess }: UserDialogProps) {
   const [birthDate, setBirthDate] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const formatCpf = (value: string) => {
-    return value
-      .replace(/\D/g, "")
-      .slice(0, 11)
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

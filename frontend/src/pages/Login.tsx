@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import solutionLogo from "../assets/solution-logo.svg";
+
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+
 import {
   Card,
   CardContent,
@@ -11,8 +14,9 @@ import {
   CardTitle,
   CardFooter,
 } from "../components/ui/card";
-import solutionLogo from "../assets/solution-logo.svg";
+
 import { UserService } from "@/services/UserServices";
+import { formatCpf } from "@/utils/formatters";
 
 export function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -22,15 +26,6 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const formatCpf = (value: string) => {
-    return value
-      .replace(/\D/g, "")
-      .slice(0, 11)
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
